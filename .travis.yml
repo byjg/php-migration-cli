@@ -8,14 +8,17 @@ install:
   - composer install
 
 script:
-  - scripts/migrate reset --yes -vvv --path example/sqlite/ sqlite:///tmp/teste.db
-  - scripts/migrate version --path example/sqlite/ sqlite:///tmp/teste.db
-  - scripts/migrate update -vvv --up-to=1 --path example/sqlite/ sqlite:///tmp/teste.db
-  - scripts/migrate version --path exavmple/sqlite/ sqlite:///tmp/teste.db
-  - scripts/migrate up -vvv --path example/sqlite/ sqlite:///tmp/teste.db
-  - scripts/migrate version --path example/sqlite/ sqlite:///tmp/teste.db
-  - scripts/migrate down -vvv --up-to=0 --path example/sqlite/ sqlite:///tmp/teste.db
-  - scripts/migrate version --path example/sqlite/ sqlite:///tmp/teste.db
-  - scripts/migrate update -vvv --up-to=1 --path example/sqlite/ sqlite:///tmp/teste.db
-  - scripts/migrate version --path example/sqlite/ sqlite:///tmp/teste.db
+  - export MIGRATE_CONNECTION=sqlite:///tmp/teste.db
+  - export MIGRATE_PATH=example/sqlite/
+  
+  - scripts/migrate reset --yes -vvv  
+  - scripts/migrate version
+  - scripts/migrate update -vvv --up-to=1
+  - scripts/migrate version
+  - scripts/migrate up -vvv
+  - scripts/migrate version
+  - scripts/migrate down -vvv --up-to=0
+  - scripts/migrate version
+  - scripts/migrate update -vvv --up-to=1
+  - scripts/migrate version
 

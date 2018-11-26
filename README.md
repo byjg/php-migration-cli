@@ -70,10 +70,12 @@ You can see [here](https://github.com/byjg/anydataset-db)
 to know more about the connection string.
 
 You can omit the uri parameter if you define it in the 
-`MIGRATE_CONNECTION` environment variable
+`MIGRATE_CONNECTION` environment variable and the parameter path with
+`MIGRATE_PATH` environment variable
 
 ```bash
 export MIGRATE_CONNECTION=sqlite:///path/to/my.db
+export MIGRATE_PATH=/path/to/migrate_files
 ```
   
 #### Command: create
