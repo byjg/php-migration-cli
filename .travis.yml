@@ -1,0 +1,21 @@
+language: php
+
+php:
+  - "7.2"
+  - "7.1"
+
+install:
+  - composer install
+
+script:
+  - scripts/migrate reset --yes -vvv --path example/sqlite/ sqlite:///tmp/teste.db
+  - scripts/migrate version --path example/sqlite/ sqlite:///tmp/teste.db
+  - scripts/migrate update -vvv --up-to=1 --path example/sqlite/ sqlite:///tmp/teste.db
+  - scripts/migrate version --path exavmple/sqlite/ sqlite:///tmp/teste.db
+  - scripts/migrate up -vvv --path example/sqlite/ sqlite:///tmp/teste.db
+  - scripts/migrate version --path example/sqlite/ sqlite:///tmp/teste.db
+  - scripts/migrate down -vvv --up-to=0 --path example/sqlite/ sqlite:///tmp/teste.db
+  - scripts/migrate version --path example/sqlite/ sqlite:///tmp/teste.db
+  - scripts/migrate update -vvv --up-to=1 --path example/sqlite/ sqlite:///tmp/teste.db
+  - scripts/migrate version --path example/sqlite/ sqlite:///tmp/teste.db
+
