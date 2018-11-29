@@ -9,20 +9,20 @@ Database Migration can be used as:
   - PHP Library to be integrated in your functional tests
   - Integrated in you CI/CD indenpent of your programming language or framework.
   
-## Important Note
+# Important Note
 
 This package is the command line interface of ByJG PHP Migration. 
 To get more information about the the project and how to please visit:
 https://github.com/byjg/migration
 
 
-## Installing
+# Installing
 
 ```
 composer require 'byjg/migration-cli=4.0.*'
 ```
 
-## Running in the command line
+# Running in the command line
 
 Migration library creates the 'migrate' script. It has the follow syntax:
 
@@ -51,9 +51,9 @@ Available commands:
   version  Get the current database version
 ```
 
-### Commands
+# Commands
 
-#### Basic Usage
+## Basic Usage
 
 The basic usage is:
 
@@ -78,7 +78,7 @@ export MIGRATE_CONNECTION=sqlite:///path/to/my.db
 export MIGRATE_PATH=/path/to/migrate_files
 ```
   
-#### Command: create
+## Command: create
 
 Create a empty directory structure with base.sql and migrations/up and migrations/down for migrations. This is
 useful for create from scratch a migration scheme.
@@ -89,7 +89,7 @@ Ex.
 migrate create /path/to/sql 
 ```
 
-#### Command: install 
+## Command: install 
 
 If you already have a database but it is not controlled by the migration system you can use this method for 
 install the required tables for migration.
@@ -98,7 +98,7 @@ install the required tables for migration.
 migrate install mysql://server/database
 ```
 
-#### Command: update
+## Command: update
 
 Will apply all necessary migrations to keep your database updated.
 
@@ -113,7 +113,7 @@ You can also specify a version:
 migrate update --up-to=34
 ``` 
 
-#### Command: reset
+## Command: reset
 
 Creates/replace a database with the "base.sql" and apply ALL migrations
 
@@ -131,7 +131,7 @@ migrate reset --yes      # reset the database without ask anything. Be careful!!
 export MIGRATE_DISABLE_RESET=true
 ```
 
-## Related Projects
+# Related Projects
 
 - [Micro ORM](https://github.com/byjg/micro-orm)
 - [Anydataset](https://github.com/byjg/anydataset)
