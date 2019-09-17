@@ -20,6 +20,7 @@ abstract class ConsoleCommand extends Command
     protected function configure()
     {
         $this
+            ->setName("migrate-cli")
             ->addArgument(
                 'connection',
                 InputArgument::OPTIONAL,
