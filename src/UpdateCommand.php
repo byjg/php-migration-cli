@@ -2,11 +2,13 @@
 
 namespace ByJG\DbMigration\Console;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
+use ByJG\DbMigration\Exception\DatabaseDoesNotRegistered;
+use ByJG\DbMigration\Exception\DatabaseIsIncompleteException;
+use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
+use ByJG\DbMigration\Exception\InvalidMigrationFile;
+use ByJG\DbMigration\Exception\OldVersionSchemaException;
 
-class UpdateCommand extends ConsoleCommand
+class UpdateCommand extends UpdateCommandBase
 {
     protected function configure()
     {
@@ -19,28 +21,15 @@ class UpdateCommand extends ConsoleCommand
 
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @throws DatabaseDoesNotRegistered
+     * @throws DatabaseIsIncompleteException
+     * @throws DatabaseNotVersionedException
+     * @throws InvalidMigrationFile
+     * @throws OldVersionSchemaException
+     */
+    protected function callMigrate()
     {
-        try {
-            $versionInfo = $this->migration->getCurrentVersion();
-            if (strpos($versionInfo['status'], 'partial') !== false) {
-                $helper = $this->getHelper('question');
-                $question = new ConfirmationQuestion(
-                    'The database was not fully updated and maybe be unstable. Did you really want migrate the version? (y/N) ',
-                    false
-                );
-
-                if (!$helper->ask($input, $output, $question)) {
-                    $output->writeln('Aborted.');
-
-                    return;
-                }
-            }
-
-            parent::execute($input, $output);
-            $this->migration->update($this->upTo, true);
-        } catch (\Exception $ex) {
-            $this->handleError($ex, $output);
-        }
+        $this->migration->update($this->upTo, true);
     }
 }

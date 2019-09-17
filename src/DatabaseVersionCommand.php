@@ -4,6 +4,7 @@ namespace ByJG\DbMigration\Console;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Exception;
 
 class DatabaseVersionCommand extends ConsoleCommand
 {
@@ -23,7 +24,7 @@ class DatabaseVersionCommand extends ConsoleCommand
             $versionInfo = $this->migration->getCurrentVersion();
             $output->writeln('version: ' . $versionInfo['version']);
             $output->writeln('status.: ' . $versionInfo['status']);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex, $output);
         }
     }

@@ -6,6 +6,7 @@ use ByJG\DbMigration\Database\DblibDatabase;
 use ByJG\DbMigration\Database\MySqlDatabase;
 use ByJG\DbMigration\Database\PgsqlDatabase;
 use ByJG\DbMigration\Database\SqliteDatabase;
+use ByJG\DbMigration\Exception\InvalidMigrationFile;
 use ByJG\DbMigration\Migration;
 use ByJG\Util\Uri;
 use Symfony\Component\Console\Command\Command;
@@ -14,12 +15,15 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Exception;
+use Error;
 
 abstract class ConsoleCommand extends Command
 {
     protected function configure()
     {
         $this
+            ->setName("migrate-cli")
             ->addArgument(
                 'connection',
                 InputArgument::OPTIONAL,
@@ -49,8 +53,8 @@ abstract class ConsoleCommand extends Command
             ->addUsage('   migrate reset mysql://root:password@server/database')
             ->addUsage('   migrate up mysql://root:password@server/database')
             ->addUsage('   migrate down mysql://root:password@server/database')
-            ->addUsage('   migrate up --up-to=10 --path=/somepath mysql://root:password@server/database')
-            ->addUsage('   migrate down --up-to=3 --path=/somepath mysql://root:password@server/database')
+            ->addUsage('   migrate up --up-to=10 --path=/some/path mysql://root:password@server/database')
+            ->addUsage('   migrate down --up-to=3 --path=/some/path mysql://root:password@server/database')
         ;
     }
 
@@ -66,9 +70,9 @@ abstract class ConsoleCommand extends Command
     protected $path;
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @throws \ByJG\DbMigration\Exception\InvalidMigrationFile
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @throws InvalidMigrationFile
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
@@ -115,8 +119,8 @@ abstract class ConsoleCommand extends Command
     }
 
     /**
-     * @param \Exception|\Error $exception
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param Exception|Error $exception
+     * @param OutputInterface $output
      */
     protected function handleError($exception, OutputInterface $output)
     {

@@ -28,8 +28,8 @@ class CreateCommand extends Command
             )
             ->addUsage('')
             ->addUsage('Example: ')
-            ->addUsage('   migrate create --path /path/to/strcuture')
-            ->addUsage('   migrate create --path /path/to/strcuture --migration ')
+            ->addUsage('   migrate create --path /path/to/structure')
+            ->addUsage('   migrate create --path /path/to/structure --migration ')
         ;
     }
 
