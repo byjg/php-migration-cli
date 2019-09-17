@@ -7,16 +7,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Exception;
 
-class DownCommand extends ConsoleCommand
+abstract class UpdateCommandBase extends ConsoleCommand
 {
-    protected function configure()
-    {
-        parent::configure();
-        $this
-            ->setName('down')
-            ->setDescription('Migrate down the database version.');
-
-    }
+    abstract protected function callMigrate();
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -25,7 +18,7 @@ class DownCommand extends ConsoleCommand
             if (strpos($versionInfo['status'], 'partial') !== false) {
                 $helper = $this->getHelper('question');
                 $question = new ConfirmationQuestion(
-                    'The database was not fully updated and maybe be unstable. Did you really want migrate the version? (y/N)',
+                    'The database was not fully updated and maybe be unstable. Did you really want migrate the version? (y/N) ',
                     false
                 );
 
@@ -37,7 +30,7 @@ class DownCommand extends ConsoleCommand
             }
 
             parent::execute($input, $output);
-            $this->migration->down($this->upTo, true);
+            $this->callMigrate();
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
         }

@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Exception;
 
 class ResetCommand extends ConsoleCommand
 {
@@ -25,10 +26,10 @@ class ResetCommand extends ConsoleCommand
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @return int|null|void
-     * @throws \ByJG\DbMigration\Exception\ResetDisabledException
+     * @throws ResetDisabledException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -54,7 +55,7 @@ class ResetCommand extends ConsoleCommand
             parent::execute($input, $output);
             $this->migration->prepareEnvironment();
             $this->migration->reset($this->upTo);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex, $output);
         }
     }
