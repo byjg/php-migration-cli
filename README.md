@@ -27,28 +27,19 @@ composer require 'byjg/migration-cli=4.0.*'
 Migration library creates the 'migrate' script. It has the follow syntax:
 
 ```
-Usage:
-  command [options] [arguments]
-
-Options:
-  -h, --help            Display this help message
-  -q, --quiet           Do not output any message
-  -V, --version         Display this application version
-      --ansi            Force ANSI output
-      --no-ansi         Disable ANSI output
-  -n, --no-interaction  Do not ask any interactive question
-  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+Usage: 
+  migrate [command] [options]
 
 Available commands:
   create   Create the directory structure FROM a pre-existing database
   down     Migrate down the database version.
-  help     Displays help for a command
   install  Install or upgrade the migrate version in a existing database
-  list     Lists commands
-  reset    Create a fresh new database
+  reset    (Re)create a database doing all migrations
   up       Migrate Up the database version
   update   Migrate Up or Down the database version based on the current database version and the migration scripts available
   version  Get the current database version
+
+use --help to get more details about the command
 ```
 
 # Commands
@@ -58,20 +49,19 @@ Available commands:
 The basic usage is:
 
 ```text
-vendor/bin/migrate <COMMAND> --path=<scripts> uri://connection
+migrate <COMMAND> --path=<scripts> --connection uri://connection
 ```
 
 The `--path` specify where the base.sql and migrate scripts are located. 
 If you omitted the `--path` it will assume the current directory. You can also
 set the `MIGRATE_PATH` environment variable with the base path 
 
-The uri://connection is the uri that represents the connection to the database. 
+The `--connection` is the uri that represents the connection to the database. 
 You can see [here](https://github.com/byjg/anydataset-db)
 to know more about the connection string.
 
 You can omit the uri parameter if you define it in the 
-`MIGRATE_CONNECTION` environment variable and the parameter path with
-`MIGRATE_PATH` environment variable
+`MIGRATE_CONNECTION` environment variable
 
 ```bash
 export MIGRATE_CONNECTION=sqlite:///path/to/my.db
@@ -86,7 +76,7 @@ useful for create from scratch a migration scheme.
 Ex.
 
 ```bash
-migrate create /path/to/sql 
+migrate create --path /path/to/sql 
 ```
 
 ## Command: install 
@@ -95,7 +85,7 @@ If you already have a database but it is not controlled by the migration system 
 install the required tables for migration.
 
 ```bash
-migrate install mysql://server/database
+migrate install --connection mysql://server/database
 ```
 
 ## Command: update
@@ -103,7 +93,7 @@ migrate install mysql://server/database
 Will apply all necessary migrations to keep your database updated.
 
 ```bash
-migrate update mysql://server/database
+migrate update --connection mysql://server/database
 ```
 
 Update command can choose if up or down your database depending on your current database version.

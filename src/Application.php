@@ -17,6 +17,8 @@ class Application
 
     protected $version;
 
+    protected $maxSize = 0;
+
     /**
      * Application constructor.
      * @param $title
@@ -31,24 +33,30 @@ class Application
     public function add(Command $command)
     {
         $this->commandList[$command->name()] = $command;
+        if (strlen($command->name()) > $this->maxSize) {
+            $this->maxSize = strlen($command->name());
+        }
     }
 
     public function run()
     {
         global $argv, $argc;
 
+        ksort($this->commandList);
+
         $climate = new CLImate();
-        $climate->description($this->title);
+        $climate->description($this->title . " - " . $this->version);
 
         $fail = (count($argv) < 2);
         if ($fail || !isset($this->commandList[$argv[1]])) {
-            $climate->out($this->title);
+            $climate->out($this->title . " - " . $this->version);
             $climate->out("");
-            $climate->out("Usage: " . $argv[0] . " [command] [options]");
+            $climate->out("Usage: ");
+            $climate->out("  " . $argv[0] . " [command] [options]");
             $climate->out("");
             $climate->out("Available commands:");
             foreach ($this->commandList as $command)  {
-                $climate->out("  " . $command->name() . ": " . $command->description());
+                $climate->out("  " . str_pad($command->name(), $this->maxSize + 2) . $command->description());
             }
             $climate->out("");
             $climate->out("use --help to get more details about the command");
