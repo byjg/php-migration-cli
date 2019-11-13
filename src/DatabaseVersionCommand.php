@@ -2,8 +2,10 @@
 
 namespace ByJG\DbMigration\Console;
 
+use ByJG\DbMigration\Exception\DatabaseDoesNotRegistered;
+use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
+use ByJG\DbMigration\Exception\OldVersionSchemaException;
 use League\CLImate\CLImate;
-use Exception;
 
 class DatabaseVersionCommand extends ConsoleCommand
 {
@@ -21,6 +23,12 @@ class DatabaseVersionCommand extends ConsoleCommand
         return 'Get the current database version';
     }
 
+    /**
+     * @param CLImate $climate
+     * @throws DatabaseDoesNotRegistered
+     * @throws DatabaseNotVersionedException
+     * @throws OldVersionSchemaException
+     */
     public function execute(CLimate $climate)
     {
         parent::execute($climate);

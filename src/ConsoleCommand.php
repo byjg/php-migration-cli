@@ -6,12 +6,14 @@ use ByJG\DbMigration\Database\DblibDatabase;
 use ByJG\DbMigration\Database\MySqlDatabase;
 use ByJG\DbMigration\Database\PgsqlDatabase;
 use ByJG\DbMigration\Database\SqliteDatabase;
+use ByJG\DbMigration\Exception\DatabaseDoesNotRegistered;
+use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
 use ByJG\DbMigration\Exception\InvalidMigrationFile;
+use ByJG\DbMigration\Exception\OldVersionSchemaException;
 use ByJG\DbMigration\Migration;
 use ByJG\Util\Uri;
+use InvalidArgumentException;
 use League\CLImate\CLImate;
-use Exception;
-use Error;
 
 abstract class ConsoleCommand extends Command
 {
@@ -91,7 +93,7 @@ abstract class ConsoleCommand extends Command
     {
         $this->connection = $climate->arguments->get('connection');
         if (!$this->connection) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'You need to setup the connection in the argument or setting the environment MIGRATE_CONNECTION'
             );
         }
@@ -144,9 +146,9 @@ abstract class ConsoleCommand extends Command
     /**
      * @param $climate
      * @return bool
-     * @throws \ByJG\DbMigration\Exception\DatabaseDoesNotRegistered
-     * @throws \ByJG\DbMigration\Exception\DatabaseNotVersionedException
-     * @throws \ByJG\DbMigration\Exception\OldVersionSchemaException
+     * @throws DatabaseDoesNotRegistered
+     * @throws DatabaseNotVersionedException
+     * @throws OldVersionSchemaException
      */
     protected function confirmPartialMigrate(CLImate $climate)
     {

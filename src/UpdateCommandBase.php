@@ -2,20 +2,21 @@
 
 namespace ByJG\DbMigration\Console;
 
+use ByJG\DbMigration\Exception\DatabaseDoesNotRegistered;
+use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
+use ByJG\DbMigration\Exception\OldVersionSchemaException;
 use League\CLImate\CLImate;
-use Exception;
 
 abstract class UpdateCommandBase extends ConsoleCommand
 {
     abstract protected function callMigrate();
 
-    public function arguments()
-    {
-        $arguments = parent::arguments();
-        $arguments["up-to"]["required"] = true;
-        return $arguments;
-    }
-
+    /**
+     * @param CLImate $climate
+     * @throws DatabaseDoesNotRegistered
+     * @throws DatabaseNotVersionedException
+     * @throws OldVersionSchemaException
+     */
     public function execute(CLimate $climate)
     {
         if (!$this->confirmPartialMigrate($climate)) {

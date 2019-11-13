@@ -2,8 +2,12 @@
 
 namespace ByJG\DbMigration\Console;
 
+use ByJG\DbMigration\Exception\DatabaseDoesNotRegistered;
+use ByJG\DbMigration\Exception\DatabaseIsIncompleteException;
+use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
+use ByJG\DbMigration\Exception\InvalidMigrationFile;
+use ByJG\DbMigration\Exception\OldVersionSchemaException;
 use League\CLImate\CLImate;
-use Exception;
 
 class DownCommand extends ConsoleCommand
 {
@@ -24,6 +28,14 @@ class DownCommand extends ConsoleCommand
         return 'Migrate down the database version.';
     }
 
+    /**
+     * @param CLImate $climate
+     * @throws DatabaseDoesNotRegistered
+     * @throws DatabaseIsIncompleteException
+     * @throws DatabaseNotVersionedException
+     * @throws InvalidMigrationFile
+     * @throws OldVersionSchemaException
+     */
     public function execute(CLimate $climate)
     {
         if (!$this->confirmPartialMigrate($climate)) {

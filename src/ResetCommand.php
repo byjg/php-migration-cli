@@ -2,13 +2,13 @@
 
 namespace ByJG\DbMigration\Console;
 
+use ByJG\DbMigration\Exception\DatabaseDoesNotRegistered;
+use ByJG\DbMigration\Exception\DatabaseIsIncompleteException;
+use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
+use ByJG\DbMigration\Exception\InvalidMigrationFile;
+use ByJG\DbMigration\Exception\OldVersionSchemaException;
 use ByJG\DbMigration\Exception\ResetDisabledException;
 use League\CLImate\CLImate;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Exception;
 
 class ResetCommand extends ConsoleCommand
 {
@@ -26,11 +26,11 @@ class ResetCommand extends ConsoleCommand
      * @param CLImate $climate
      * @return int|null|void
      * @throws ResetDisabledException
-     * @throws \ByJG\DbMigration\Exception\DatabaseDoesNotRegistered
-     * @throws \ByJG\DbMigration\Exception\DatabaseIsIncompleteException
-     * @throws \ByJG\DbMigration\Exception\DatabaseNotVersionedException
-     * @throws \ByJG\DbMigration\Exception\InvalidMigrationFile
-     * @throws \ByJG\DbMigration\Exception\OldVersionSchemaException
+     * @throws DatabaseDoesNotRegistered
+     * @throws DatabaseIsIncompleteException
+     * @throws DatabaseNotVersionedException
+     * @throws InvalidMigrationFile
+     * @throws OldVersionSchemaException
      */
     public function execute(CLimate $climate)
     {

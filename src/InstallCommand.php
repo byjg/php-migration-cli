@@ -2,10 +2,10 @@
 
 namespace ByJG\DbMigration\Console;
 
+use ByJG\DbMigration\Exception\DatabaseDoesNotRegistered;
 use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
 use ByJG\DbMigration\Exception\OldVersionSchemaException;
 use League\CLImate\CLImate;
-use Exception;
 
 class InstallCommand extends ConsoleCommand
 {
@@ -25,7 +25,7 @@ class InstallCommand extends ConsoleCommand
      * @return int|null|void
      * @throws DatabaseNotVersionedException
      * @throws OldVersionSchemaException
-     * @throws \ByJG\DbMigration\Exception\DatabaseDoesNotRegistered
+     * @throws DatabaseDoesNotRegistered
      */
     public function execute(CLimate $climate)
     {

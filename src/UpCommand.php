@@ -10,6 +10,13 @@ use ByJG\DbMigration\Exception\OldVersionSchemaException;
 
 class UpCommand extends UpdateCommandBase
 {
+    public function arguments()
+    {
+        $arguments = parent::arguments();
+        $arguments["up-to"]["required"] = true;
+        return $arguments;
+    }
+
     public function name()
     {
         return 'up';
