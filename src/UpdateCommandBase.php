@@ -2,37 +2,24 @@
 
 namespace ByJG\DbMigration\Console;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
+use League\CLImate\CLImate;
 use Exception;
 
 abstract class UpdateCommandBase extends ConsoleCommand
 {
     abstract protected function callMigrate();
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(CLimate $climate)
     {
         try {
-            $versionInfo = $this->migration->getCurrentVersion();
-            if (strpos($versionInfo['status'], 'partial') !== false) {
-                $helper = $this->getHelper('question');
-                $question = new ConfirmationQuestion(
-                    'The database was not fully updated and maybe be unstable. Did you really want migrate the version? (y/N) ',
-                    false
-                );
-
-                if (!$helper->ask($input, $output, $question)) {
-                    $output->writeln('Aborted.');
-
-                    return;
-                }
+            if (!$this->confirmPartialMigrate($climate)) {
+                $climate->out('Aborted.');
+                return;
             }
-
-            parent::execute($input, $output);
+            parent::execute($climate);
             $this->callMigrate();
         } catch (Exception $ex) {
-            $this->handleError($ex, $output);
+            $this->handleError($ex, $climate);
         }
     }
 }

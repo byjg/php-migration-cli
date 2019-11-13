@@ -130,4 +130,24 @@ abstract class ConsoleCommand extends Command
             $climate->out($exception->getMessage());
         }
     }
+
+    /**
+     * @param $climate
+     * @return bool
+     * @throws \ByJG\DbMigration\Exception\DatabaseDoesNotRegistered
+     * @throws \ByJG\DbMigration\Exception\DatabaseNotVersionedException
+     * @throws \ByJG\DbMigration\Exception\OldVersionSchemaException
+     */
+    protected function confirmPartialMigrate(CLImate $climate)
+    {
+        $versionInfo = $this->migration->getCurrentVersion();
+        if (strpos($versionInfo['status'], 'partial') !== false) {
+
+            $input = $climate->radio('The database was not fully updated and maybe be unstable. Did you really want migrate the version?', ['No', 'Yes']);
+            $response = $input->prompt();
+            return ($response == 'Yes');
+        }
+
+        return true;
+    }
 }

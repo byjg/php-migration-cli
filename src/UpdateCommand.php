@@ -10,15 +10,15 @@ use ByJG\DbMigration\Exception\OldVersionSchemaException;
 
 class UpdateCommand extends UpdateCommandBase
 {
-    protected function configure()
+    public function name()
     {
-        parent::configure();
-        $this
-            ->setName('update')
-            ->setDescription('Migrate Up or Down the database version based on the current database version and the ' .
-                'migration scripts available'
-            );
+        return 'update';
+    }
 
+    public function description()
+    {
+        return 'Migrate Up or Down the database version based on the current database version and the ' .
+               'migration scripts available';
     }
 
     /**
