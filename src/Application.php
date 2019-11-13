@@ -59,7 +59,7 @@ class Application
                 $climate->out("  " . str_pad($command->name(), $this->maxSize + 2) . $command->description());
             }
             $climate->out("");
-            $climate->out("use --help to get more details about the command");
+            $climate->out("use `${argv[0]} command --help` to get more details about the command");
             $climate->out("");
             return;
         }
