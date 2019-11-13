@@ -2,44 +2,40 @@
 
 namespace ByJG\DbMigration\Console;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
+use League\CLImate\CLImate;
 use Exception;
 
 class DownCommand extends ConsoleCommand
 {
-    protected function configure()
+    public function name()
     {
-        parent::configure();
-        $this
-            ->setName('down')
-            ->setDescription('Migrate down the database version.');
-
+        return 'down';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function description()
+    {
+        return 'Migrate down the database version.';
+    }
+
+    public function execute(CLimate $climate)
     {
         try {
             $versionInfo = $this->migration->getCurrentVersion();
             if (strpos($versionInfo['status'], 'partial') !== false) {
-                $helper = $this->getHelper('question');
-                $question = new ConfirmationQuestion(
-                    'The database was not fully updated and maybe be unstable. Did you really want migrate the version? (y/N)',
-                    false
-                );
 
-                if (!$helper->ask($input, $output, $question)) {
-                    $output->writeln('Aborted.');
+                $input = $climate->radio('The database was not fully updated and maybe be unstable. Did you really want migrate the version?', ['No', 'Yes']);
+                $response = $input->prompt();
+                if ($response == 'No') {
+                    $climate->out('Aborted.');
 
                     return;
                 }
             }
 
-            parent::execute($input, $output);
+            parent::execute($climate);
             $this->migration->down($this->upTo, true);
         } catch (Exception $ex) {
-            $this->handleError($ex, $output);
+            $this->handleError($ex, $climate);
         }
     }
 }

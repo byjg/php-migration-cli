@@ -22,7 +22,7 @@ require_once($autoload);
 $application = new Application('Migrate Script by JG', '4.1.0');
 //$application->add(new ResetCommand());
 //$application->add(new UpCommand());
-//$application->add(new DownCommand());
+$application->add(new DownCommand());
 $application->add(new CreateCommand());
 $application->add(new DatabaseVersionCommand());
 //$application->add(new InstallCommand());
