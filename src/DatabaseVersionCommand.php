@@ -2,30 +2,34 @@
 
 namespace ByJG\DbMigration\Console;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use League\CLImate\CLImate;
 use Exception;
 
 class DatabaseVersionCommand extends ConsoleCommand
 {
-    protected function configure()
+    public function arguments()
     {
-        parent::configure();
-        $this
-            ->setName('version')
-            ->setDescription('Get the current database version');
-
+        return parent::arguments();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function name() {
+        return "version";
+    }
+
+    public function description()
     {
-        parent::execute($input, $output);
+        return 'Get the current database version';
+    }
+
+    public function execute(CLimate $climate)
+    {
+        parent::execute($climate);
         try {
             $versionInfo = $this->migration->getCurrentVersion();
-            $output->writeln('version: ' . $versionInfo['version']);
-            $output->writeln('status.: ' . $versionInfo['status']);
+            $climate->out('version: ' . $versionInfo['version']);
+            $climate->out('status.: ' . $versionInfo['status']);
         } catch (Exception $ex) {
-            $this->handleError($ex, $output);
+            $this->handleError($ex, $climate);
         }
     }
 }

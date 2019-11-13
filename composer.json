@@ -11,7 +11,7 @@
   "prefer-stable": true,
   "require": {
     "byjg/migration": "4.0.*",
-    "symfony/console": "^4.3"
+    "league/climate": "3.5.*"
   },
   "autoload": {
     "psr-4": {

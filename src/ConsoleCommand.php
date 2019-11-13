@@ -9,53 +9,47 @@ use ByJG\DbMigration\Database\SqliteDatabase;
 use ByJG\DbMigration\Exception\InvalidMigrationFile;
 use ByJG\DbMigration\Migration;
 use ByJG\Util\Uri;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use League\CLImate\CLImate;
 use Exception;
 use Error;
 
 abstract class ConsoleCommand extends Command
 {
-    protected function configure()
+    public function arguments()
     {
-        $this
-            ->setName("migrate-cli")
-            ->addArgument(
-                'connection',
-                InputArgument::OPTIONAL,
-                'The connection string. Ex. mysql://root:password@server/database',
-                getenv('MIGRATE_CONNECTION')
-            )
-            ->addOption(
-                'path',
-                'p',
-                InputOption::VALUE_REQUIRED,
-                'Define the path where the base.sql resides. If not set assumes the current folder'
-            )
-            ->addOption(
-                'up-to',
-                'u',
-                InputOption::VALUE_REQUIRED,
-                'Run up to the specified version'
-            )
-            ->addOption(
-                'no-base',
-                null,
-                InputOption::VALUE_NONE,
-                'Remove the check for base.sql file'
-            )
-            ->addUsage('')
-            ->addUsage('Example: ')
-            ->addUsage('   migrate reset mysql://root:password@server/database')
-            ->addUsage('   migrate up mysql://root:password@server/database')
-            ->addUsage('   migrate down mysql://root:password@server/database')
-            ->addUsage('   migrate up --up-to=10 --path=/some/path mysql://root:password@server/database')
-            ->addUsage('   migrate down --up-to=3 --path=/some/path mysql://root:password@server/database')
-        ;
+        return [
+            "connection" => [
+                "longPrefix" => "connection",
+                "description" => 'The connection string. Ex. mysql://root:password@server/database',
+                "required" => false,
+                "defaultValue" => getenv('MIGRATE_CONNECTION')
+            ],
+            "path" => [
+                "prefix" => "p",
+                "longPrefix" => "path",
+                "description" => 'Define the path where the base.sql resides. If not set assumes the current folder',
+                "required" => true,
+            ],
+            "up-to" => [
+                "prefix" => "u",
+                "longPrefix" => "up-to",
+                "description" => 'Run up to the specified version',
+                "required" => true,
+            ],
+            'verbose' => [
+                'prefix'      => 'v',
+                'longPrefix'  => 'verbose',
+                'description' => 'Verbose output',
+                'castTo' => "int",
+            ],
+            'help' => [
+                'prefix'      => 'h',
+                'longPrefix'  => 'help',
+                'noValue' => true,
+                'required' => false,
+                'description' => 'This help',
+            ],
+        ];
     }
 
     /**
@@ -69,29 +63,32 @@ abstract class ConsoleCommand extends Command
 
     protected $path;
 
+    protected $verbose;
+
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param CLImate $climate
      * @throws InvalidMigrationFile
      */
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    public function initialize(CLImate $climate)
     {
-        $this->connection = $input->getArgument('connection');
+        $this->connection = $climate->arguments->get('connection');
         if (!$this->connection) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'You need to setup the connection in the argument or setting the environment MIGRATE_CONNECTION'
             );
         }
 
-        $this->path = $input->getOption('path');
+        $this->path = $climate->arguments->get('path');
         if (!$this->path) {
             $this->path = (!empty(getenv('MIGRATE_PATH')) ? getenv('MIGRATE_PATH') : ".");
         }
         $this->path = realpath($this->path);
 
-        $this->upTo = $input->getOption('up-to');
+        $this->upTo = $climate->arguments->get('up-to');
 
-        $requiredBase = !$input->getOption('no-base');
+        $requiredBase = !$climate->arguments->get('no-base');
+
+        $this->verbose = $climate->arguments->get('verbose');
 
         $migrationTable = (empty(getenv('MIGRATE_TABLE')) ? "migration_version" : getenv('MIGRATE_TABLE'));
         $this->path = realpath($this->path);
@@ -104,30 +101,33 @@ abstract class ConsoleCommand extends Command
             ->registerDatabase('dblib', DblibDatabase::class);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @param CLImate $climate
+     */
+    public function execute(CLImate $climate)
     {
-        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-            $output->writeln('Connection String: ' . $this->connection);
-            $output->writeln('Path: ' . $this->path);
+        if ($this->verbose >= 1) {
+            $climate->out('Connection String: ' . $this->connection);
+            $climate->out('Path: ' . $this->path);
         }
 
-        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
-            $this->migration->addCallbackProgress(function ($command, $version) use ($output) {
-                $output->writeln('Doing: ' . $command . " to " . $version);
+        if ($this->verbose >= 2) {
+            $this->migration->addCallbackProgress(function ($command, $version) use ($climate) {
+                $climate->out('Doing: ' . $command . " to " . $version);
             });
         }
     }
 
     /**
      * @param Exception|Error $exception
-     * @param OutputInterface $output
+     * @param CLImate $climate
      */
-    protected function handleError($exception, OutputInterface $output)
+    protected function handleError($exception, CLImate $climate)
     {
-        $output->writeln('-- Error migrating tables --');
-        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-            $output->writeln(get_class($exception));
-            $output->writeln($exception->getMessage());
+        $climate->out('-- Error migrating tables --');
+        if ($this->verbose >= 1) {
+            $climate->out(get_class($exception));
+            $climate->out($exception->getMessage());
         }
     }
 }
