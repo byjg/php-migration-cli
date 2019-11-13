@@ -3,6 +3,7 @@
 
 namespace ByJG\DbMigration\Console;
 
+use Exception;
 use League\CLImate\CLImate;
 
 class Application
@@ -64,8 +65,8 @@ class Application
 
         try {
             $climate->arguments->parse();
-        } catch (\Exception $ex) {
-            if ($climate->arguments->get("help")) {
+        } catch (Exception $ex) {
+            if ($climate->arguments->exists("help")) {
                 $climate->usage();
                 return;
             }

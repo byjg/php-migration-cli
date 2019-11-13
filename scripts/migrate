@@ -14,7 +14,7 @@ $autoload = realpath(__DIR__."/../vendor/autoload.php");
 if (!file_exists($autoload)) {
     $autoload = realpath(__DIR__."/../../../autoload.php");
     if (!file_exists($autoload)) {
-        throw new \Exception('Autoload not found. Did you run `composer dump-autoload`?');
+        throw new Exception('Autoload not found. Did you run `composer dump-autoload`?');
     }
 }
 require_once($autoload);
@@ -23,7 +23,7 @@ $application = new Application('Migrate Script by JG', '4.1.0');
 //$application->add(new ResetCommand());
 //$application->add(new UpCommand());
 //$application->add(new DownCommand());
-//$application->add(new CreateCommand());
+$application->add(new CreateCommand());
 $application->add(new DatabaseVersionCommand());
 //$application->add(new InstallCommand());
 //$application->add(new UpdateCommand());

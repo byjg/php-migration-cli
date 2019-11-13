@@ -2,38 +2,45 @@
 
 namespace ByJG\DbMigration\Console;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use League\CLImate\CLImate;
 
 class CreateCommand extends Command
 {
-    protected function configure()
+    public function arguments()
     {
-        $this
-            ->setName('create')
-            ->setDescription('Create the directory structure FROM a pre-existing database')
-            ->addArgument(
-                'path',
-                InputArgument::REQUIRED,
-                'Define the path where the base.sql resides. If not set assumes the current folder'
-            )
-            ->addOption(
-                'migration',
-                'm',
-                InputOption::VALUE_NONE,
-                'Create the migration script (Up and Down)'
-            )
-            ->addUsage('')
-            ->addUsage('Example: ')
-            ->addUsage('   migrate create --path /path/to/structure')
-            ->addUsage('   migrate create --path /path/to/structure --migration ')
-        ;
+        return [
+            "path" => [
+                "longPrefix" => "path",
+                "description" => 'Define the path where the base.sql resides.',
+                "required" => true
+            ],
+            "migration" => [
+                "prefix" => "m",
+                "longPrefix" => "migration",
+                "description" => 'Create the migration script (Up and Down)',
+                "noValue" => true
+            ],
+            'help' => [
+                'prefix'      => 'h',
+                'longPrefix'  => 'help',
+                'noValue' => true,
+                'required' => false,
+                'description' => 'This help',
+            ],
+        ];
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    public function name()
+    {
+        return 'create';
+    }
+
+    public function description()
+    {
+        return 'Create the directory structure FROM a pre-existing database';
+    }
+
+    public function initialize(CLimate $climate)
     {
     }
 
@@ -58,9 +65,9 @@ class CreateCommand extends Command
         return $lastVersion;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(CLimate $climate)
     {
-        $path = $input->getArgument('path');
+        $path = $climate->arguments->get('path');
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
@@ -75,9 +82,9 @@ class CreateCommand extends Command
             mkdir("$path/migrations/down", 0777, true);
         }
 
-        if ($input->hasOption('migration')) {
-            $output->writeln('Created UP version: ' . $this->createMigrationSql("$path/migrations/up", 0));
-            $output->writeln('Created DOWN version: ' . $this->createMigrationSql("$path/migrations/down", -1));
+        if ($climate->arguments->exists('migration')) {
+            $climate->out('Created UP version: ' . $this->createMigrationSql("$path/migrations/up", 0));
+            $climate->out('Created DOWN version: ' . $this->createMigrationSql("$path/migrations/down", -1));
         }
     }
 }
