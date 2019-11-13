@@ -3,6 +3,7 @@
 namespace ByJG\DbMigration\Console;
 
 use ByJG\DbMigration\Exception\ResetDisabledException;
+use League\CLImate\CLImate;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,50 +14,52 @@ class ResetCommand extends ConsoleCommand
 {
     protected function configure()
     {
-        parent::configure();
-        $this
-            ->setName('reset')
-            ->setDescription('Create a fresh new database')
-            ->addOption(
-                'yes',
-                null,
-                InputOption::VALUE_NONE,
-                'Answer yes to any interactive question'
-            );
+        $arguments = parent::configure();
+        $arguments['yes'] =  [
+            'longPrefix'  => 'yes',
+            'noValue' => true,
+            'required' => false,
+            'description' => 'Answer yes to any interactive question',
+        ];
+        return $arguments;
+    }
+
+    public function name()
+    {
+        return 'reset';
+    }
+
+    public function description()
+    {
+        return '(Re)create a database doing all migrations';
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param CLImate $climate
      * @return int|null|void
      * @throws ResetDisabledException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(CLimate $climate)
     {
         if (getenv('MIGRATE_DISABLE_RESET') === "true") {
             throw new ResetDisabledException('Reset was disabled by MIGRATE_DISABLE_RESET environment variable. Cannot continue.');
         }
 
         try {
-            $helper = $this->getHelper('question');
-            if (!$input->getOption('yes')) {
-                $question = new ConfirmationQuestion(
-                    'This will ERASE all of data in your data. Continue with this action? (y/N) ',
-                    false
-                );
-
-                if (!$helper->ask($input, $output, $question)) {
-                    $output->writeln('Aborted.');
-
+            if (!$climate->arguments->exists('yes')) {
+                $input = $climate->radio('This will ERASE all of data in your data. Continue with this action?', ['No', 'Yes']);
+                $response = $input->prompt();
+                if ($response == 'No') {
+                    $climate->out('Aborted.');
                     return;
                 }
             }
 
-            parent::execute($input, $output);
+            parent::execute($climate);
             $this->migration->prepareEnvironment();
             $this->migration->reset($this->upTo);
         } catch (Exception $ex) {
-            $this->handleError($ex, $output);
+            $this->handleError($ex, $climate);
         }
     }
 }

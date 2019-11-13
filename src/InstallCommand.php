@@ -4,30 +4,30 @@ namespace ByJG\DbMigration\Console;
 
 use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
 use ByJG\DbMigration\Exception\OldVersionSchemaException;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use League\CLImate\CLImate;
 use Exception;
 
 class InstallCommand extends ConsoleCommand
 {
-    protected function configure()
+    public function name()
     {
-        parent::configure();
-        $this
-            ->setName('install')
-            ->setDescription('Install or upgrade the migrate version in a existing database');
+        return 'install';
 
     }
 
+    public function description()
+    {
+        return 'Install or upgrade the migrate version in a existing database';
+    }
+
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param CLImate $climate
      * @return int|null|void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(CLimate $climate)
     {
         try {
-            parent::execute($input, $output);
+            parent::execute($climate);
 
             $action = 'Database is already versioned. ';
             try {
@@ -41,11 +41,11 @@ class InstallCommand extends ConsoleCommand
             }
 
             $version = $this->migration->getCurrentVersion();
-            $output->writeln($action);
-            $output->writeln('current version: ' . $version['version']);
-            $output->writeln('current status.: ' . $version['status']);
+            $climate->out($action);
+            $climate->out('current version: ' . $version['version']);
+            $climate->out('current status.: ' . $version['status']);
         } catch (Exception $ex) {
-            $this->handleError($ex, $output);
+            $this->handleError($ex, $climate);
         }
     }
 }
