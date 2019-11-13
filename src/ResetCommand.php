@@ -12,18 +12,6 @@ use Exception;
 
 class ResetCommand extends ConsoleCommand
 {
-    protected function configure()
-    {
-        $arguments = parent::configure();
-        $arguments['yes'] =  [
-            'longPrefix'  => 'yes',
-            'noValue' => true,
-            'required' => false,
-            'description' => 'Answer yes to any interactive question',
-        ];
-        return $arguments;
-    }
-
     public function name()
     {
         return 'reset';
@@ -38,6 +26,11 @@ class ResetCommand extends ConsoleCommand
      * @param CLImate $climate
      * @return int|null|void
      * @throws ResetDisabledException
+     * @throws \ByJG\DbMigration\Exception\DatabaseDoesNotRegistered
+     * @throws \ByJG\DbMigration\Exception\DatabaseIsIncompleteException
+     * @throws \ByJG\DbMigration\Exception\DatabaseNotVersionedException
+     * @throws \ByJG\DbMigration\Exception\InvalidMigrationFile
+     * @throws \ByJG\DbMigration\Exception\OldVersionSchemaException
      */
     public function execute(CLimate $climate)
     {
@@ -45,21 +38,17 @@ class ResetCommand extends ConsoleCommand
             throw new ResetDisabledException('Reset was disabled by MIGRATE_DISABLE_RESET environment variable. Cannot continue.');
         }
 
-        try {
-            if (!$climate->arguments->exists('yes')) {
-                $input = $climate->radio('This will ERASE all of data in your data. Continue with this action?', ['No', 'Yes']);
-                $response = $input->prompt();
-                if ($response == 'No') {
-                    $climate->out('Aborted.');
-                    return;
-                }
+        if (!$this->yes) {
+            $input = $climate->radio('This will ERASE all of data in your data. Continue with this action?', ['No', 'Yes']);
+            $response = $input->prompt();
+            if ($response == 'No') {
+                $climate->out('Aborted.');
+                return;
             }
-
-            parent::execute($climate);
-            $this->migration->prepareEnvironment();
-            $this->migration->reset($this->upTo);
-        } catch (Exception $ex) {
-            $this->handleError($ex, $climate);
         }
+
+        parent::execute($climate);
+        $this->migration->prepareEnvironment();
+        $this->migration->reset($this->upTo);
     }
 }

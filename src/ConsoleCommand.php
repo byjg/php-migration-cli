@@ -17,29 +17,30 @@ abstract class ConsoleCommand extends Command
 {
     public function arguments()
     {
-        return [
+        $arguments = [
             "connection" => [
                 "longPrefix" => "connection",
                 "description" => 'The connection string. Ex. mysql://root:password@server/database',
-                "required" => false,
+                "required" => true,
                 "defaultValue" => getenv('MIGRATE_CONNECTION')
             ],
             "path" => [
                 "prefix" => "p",
                 "longPrefix" => "path",
-                "description" => 'Define the path where the base.sql resides. If not set assumes the current folder',
+                "description" => 'Define the path where the base.sql is located.',
                 "required" => true,
+                "defaultValue" => getenv('MIGRATE_PATH')
             ],
             "up-to" => [
                 "prefix" => "u",
                 "longPrefix" => "up-to",
                 "description" => 'Run up to the specified version',
-                "required" => true,
+                "required" => false,
             ],
             'verbose' => [
                 'prefix'      => 'v',
                 'longPrefix'  => 'verbose',
-                'description' => 'Verbose output',
+                'description' => 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug',
                 'castTo' => "int",
             ],
             'help' => [
@@ -49,7 +50,22 @@ abstract class ConsoleCommand extends Command
                 'required' => false,
                 'description' => 'This help',
             ],
+            'yes' => [
+                'longPrefix'  => 'yes',
+                'noValue' => true,
+                'required' => false,
+                'description' => 'Answer yes to any interactive question',
+            ]
         ];
+
+        if (empty($arguments["connection"]["defaultValue"])) {
+            unset($arguments["connection"]["defaultValue"]);
+        }
+        if (empty($arguments["path"]["defaultValue"])) {
+            unset($arguments["path"]["defaultValue"]);
+        }
+
+        return $arguments;
     }
 
     /**
@@ -64,6 +80,8 @@ abstract class ConsoleCommand extends Command
     protected $path;
 
     protected $verbose;
+
+    protected $yes;
 
     /**
      * @param CLImate $climate
@@ -85,6 +103,11 @@ abstract class ConsoleCommand extends Command
         $this->path = realpath($this->path);
 
         $this->upTo = $climate->arguments->get('up-to');
+        if ($this->upTo === "") {
+            $this->upTo = null;
+        }
+
+        $this->yes = $climate->arguments->get("yes");
 
         $requiredBase = !$climate->arguments->get('no-base');
 
@@ -119,19 +142,6 @@ abstract class ConsoleCommand extends Command
     }
 
     /**
-     * @param Exception|Error $exception
-     * @param CLImate $climate
-     */
-    protected function handleError($exception, CLImate $climate)
-    {
-        $climate->out('-- Error migrating tables --');
-        if ($this->verbose >= 1) {
-            $climate->out(get_class($exception));
-            $climate->out($exception->getMessage());
-        }
-    }
-
-    /**
      * @param $climate
      * @return bool
      * @throws \ByJG\DbMigration\Exception\DatabaseDoesNotRegistered
@@ -142,8 +152,13 @@ abstract class ConsoleCommand extends Command
     {
         $versionInfo = $this->migration->getCurrentVersion();
         if (strpos($versionInfo['status'], 'partial') !== false) {
+            $message = 'The database was not fully updated and maybe be unstable.';
+            if ($this->yes) {
+                $climate->out("$message Assumed yes.");
+                return true;
+            }
 
-            $input = $climate->radio('The database was not fully updated and maybe be unstable. Did you really want migrate the version?', ['No', 'Yes']);
+            $input = $climate->radio("$message Did you really want migrate the version?", ['No', 'Yes']);
             $response = $input->prompt();
             return ($response == 'Yes');
         }

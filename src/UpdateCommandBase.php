@@ -9,17 +9,20 @@ abstract class UpdateCommandBase extends ConsoleCommand
 {
     abstract protected function callMigrate();
 
+    public function arguments()
+    {
+        $arguments = parent::arguments();
+        $arguments["up-to"]["required"] = true;
+        return $arguments;
+    }
+
     public function execute(CLimate $climate)
     {
-        try {
-            if (!$this->confirmPartialMigrate($climate)) {
-                $climate->out('Aborted.');
-                return;
-            }
-            parent::execute($climate);
-            $this->callMigrate();
-        } catch (Exception $ex) {
-            $this->handleError($ex, $climate);
+        if (!$this->confirmPartialMigrate($climate)) {
+            $climate->out('Aborted.');
+            return;
         }
+        parent::execute($climate);
+        $this->callMigrate();
     }
 }

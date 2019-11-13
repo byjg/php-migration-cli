@@ -23,29 +23,28 @@ class InstallCommand extends ConsoleCommand
     /**
      * @param CLImate $climate
      * @return int|null|void
+     * @throws DatabaseNotVersionedException
+     * @throws OldVersionSchemaException
+     * @throws \ByJG\DbMigration\Exception\DatabaseDoesNotRegistered
      */
     public function execute(CLimate $climate)
     {
+        parent::execute($climate);
+
+        $action = 'Database is already versioned. ';
         try {
-            parent::execute($climate);
-
-            $action = 'Database is already versioned. ';
-            try {
-                $this->migration->getCurrentVersion();
-            } catch (DatabaseNotVersionedException $ex) {
-                $action = 'Created the version table';
-                $this->migration->createVersion();
-            } catch (OldVersionSchemaException $ex) {
-                $action = 'Updated the version table';
-                $this->migration->updateTableVersion();
-            }
-
-            $version = $this->migration->getCurrentVersion();
-            $climate->out($action);
-            $climate->out('current version: ' . $version['version']);
-            $climate->out('current status.: ' . $version['status']);
-        } catch (Exception $ex) {
-            $this->handleError($ex, $climate);
+            $this->migration->getCurrentVersion();
+        } catch (DatabaseNotVersionedException $ex) {
+            $action = 'Created the version table';
+            $this->migration->createVersion();
+        } catch (OldVersionSchemaException $ex) {
+            $action = 'Updated the version table';
+            $this->migration->updateTableVersion();
         }
+
+        $version = $this->migration->getCurrentVersion();
+        $climate->out($action);
+        $climate->out('current version: ' . $version['version']);
+        $climate->out('current status.: ' . $version['status']);
     }
 }

@@ -7,6 +7,13 @@ use Exception;
 
 class DownCommand extends ConsoleCommand
 {
+    public function arguments()
+    {
+        $arguments = parent::arguments();
+        $arguments["up-to"]["required"] = true;
+        return $arguments;
+    }
+
     public function name()
     {
         return 'down';
@@ -19,15 +26,11 @@ class DownCommand extends ConsoleCommand
 
     public function execute(CLimate $climate)
     {
-        try {
-            if (!$this->confirmPartialMigrate($climate)) {
-                $climate->out('Aborted.');
-                return;
-            }
-            parent::execute($climate);
-            $this->migration->down($this->upTo, true);
-        } catch (Exception $ex) {
-            $this->handleError($ex, $climate);
+        if (!$this->confirmPartialMigrate($climate)) {
+            $climate->out('Aborted.');
+            return;
         }
+        parent::execute($climate);
+        $this->migration->down($this->upTo, true);
     }
 }

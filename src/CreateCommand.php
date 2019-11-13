@@ -82,7 +82,7 @@ class CreateCommand extends Command
             mkdir("$path/migrations/down", 0777, true);
         }
 
-        if ($climate->arguments->exists('migration')) {
+        if ($climate->arguments->get('migration')) {
             $climate->out('Created UP version: ' . $this->createMigrationSql("$path/migrations/up", 0));
             $climate->out('Created DOWN version: ' . $this->createMigrationSql("$path/migrations/down", -1));
         }

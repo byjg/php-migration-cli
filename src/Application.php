@@ -46,9 +46,9 @@ class Application
             $climate->out("");
             $climate->out("Usage: " . $argv[0] . " [command] [options]");
             $climate->out("");
-            $climate->out("Command List:");
+            $climate->out("Available commands:");
             foreach ($this->commandList as $command)  {
-                $climate->out("  - " . $command->name() . ": " . $command->description());
+                $climate->out("  " . $command->name() . ": " . $command->description());
             }
             $climate->out("");
             $climate->out("use --help to get more details about the command");
@@ -65,15 +65,23 @@ class Application
 
         try {
             $climate->arguments->parse();
+
+            if ($climate->arguments->get("help")) {
+                $climate->usage();
+                return;
+            }
+
+            $this->commandList[$command]->initialize($climate);
+            $this->commandList[$command]->execute($climate);
         } catch (Exception $ex) {
-            if ($climate->arguments->exists("help")) {
+            if ($climate->arguments->get("help")) {
                 $climate->usage();
                 return;
             }
 
             $climate->error($ex->getMessage());
 
-            if ($climate->arguments->get("verbose") >= 1) {
+            if ($climate->arguments->get("verbose") >= 3) {
                 $climate->out("");
                 $climate->error("Stack Trace:");
                 $climate->error($ex->getTraceAsString());
