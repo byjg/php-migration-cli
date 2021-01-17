@@ -10,7 +10,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "byjg/migration": "4.1.0.x-dev",
+    "byjg/migration": "4.2.*",
     "symfony/console": "^4.3"
   },
   "autoload": {

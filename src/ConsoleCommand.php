@@ -101,6 +101,7 @@ abstract class ConsoleCommand extends Command
             ->registerDatabase('sqlite', SqliteDatabase::class)
             ->registerDatabase('mysql', MySqlDatabase::class)
             ->registerDatabase('pgsql', PgsqlDatabase::class)
+            ->registerDatabase('sqlsrv', DblibDatabase::class)
             ->registerDatabase('dblib', DblibDatabase::class);
     }
 
