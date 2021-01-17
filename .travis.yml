@@ -23,3 +23,10 @@ script:
   - scripts/migrate update -vvv --up-to=1
   - scripts/migrate version
 
+jobs:
+  include:
+    - stage: documentation
+      if: branch = master
+      install: skip
+      script: "curl https://opensource.byjg.com/add-doc.sh | bash /dev/stdin php migration-cli"
+
