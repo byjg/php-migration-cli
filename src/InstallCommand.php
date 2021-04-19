@@ -44,8 +44,10 @@ class InstallCommand extends ConsoleCommand
             $output->writeln($action);
             $output->writeln('current version: ' . $version['version']);
             $output->writeln('current status.: ' . $version['status']);
+            return 0;
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
+            return 1;
         }
     }
 }

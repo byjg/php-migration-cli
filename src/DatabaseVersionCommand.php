@@ -24,8 +24,10 @@ class DatabaseVersionCommand extends ConsoleCommand
             $versionInfo = $this->migration->getCurrentVersion();
             $output->writeln('version: ' . $versionInfo['version']);
             $output->writeln('status.: ' . $versionInfo['status']);
+            return 0;
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
+            return 1;
         }
     }
 }
