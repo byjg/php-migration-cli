@@ -25,16 +25,17 @@ abstract class UpdateCommandBase extends ConsoleCommand
                 if (!$helper->ask($input, $output, $question)) {
                     $output->writeln('Aborted.');
 
-                    return;
+                    return 1;
                 }
             }
 
-            parent::execute($input, $output);
-            $this->callMigrate();
-            return 0;
+            if (parent::execute($input, $output) == 0) {
+                $this->callMigrate();
+                return 0;
+            }
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
-            return 1;
         }
+        return 1;
     }
 }

@@ -27,7 +27,9 @@ class InstallCommand extends ConsoleCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            parent::execute($input, $output);
+            if (parent::execute($input, $output) != 0) {
+                return 1;
+            };
 
             $action = 'Database is already versioned. ';
             try {
