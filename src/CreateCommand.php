@@ -79,5 +79,6 @@ class CreateCommand extends Command
             $output->writeln('Created UP version: ' . $this->createMigrationSql("$path/migrations/up", 0));
             $output->writeln('Created DOWN version: ' . $this->createMigrationSql("$path/migrations/down", -1));
         }
+        return 0;
     }
 }

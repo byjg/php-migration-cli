@@ -32,14 +32,17 @@ class DownCommand extends ConsoleCommand
                 if (!$helper->ask($input, $output, $question)) {
                     $output->writeln('Aborted.');
 
-                    return;
+                    return 1;
                 }
             }
 
-            parent::execute($input, $output);
-            $this->migration->down($this->upTo, true);
+            if (parent::execute($input, $output) == 0) {
+                $this->migration->down($this->upTo, true);
+                return 0;
+            }
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
         }
+        return 1;
     }
 }

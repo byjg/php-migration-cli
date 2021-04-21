@@ -27,7 +27,9 @@ class InstallCommand extends ConsoleCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            parent::execute($input, $output);
+            if (parent::execute($input, $output) != 0) {
+                return 1;
+            };
 
             $action = 'Database is already versioned. ';
             try {
@@ -44,8 +46,10 @@ class InstallCommand extends ConsoleCommand
             $output->writeln($action);
             $output->writeln('current version: ' . $version['version']);
             $output->writeln('current status.: ' . $version['status']);
+            return 0;
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
+            return 1;
         }
     }
 }
