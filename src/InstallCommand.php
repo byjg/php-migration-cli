@@ -4,6 +4,7 @@ namespace ByJG\DbMigration\Console;
 
 use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
 use ByJG\DbMigration\Exception\OldVersionSchemaException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Exception;
@@ -46,7 +47,7 @@ class InstallCommand extends ConsoleCommand
             $output->writeln('current status.: ' . $version['status']);
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
-            return 1;
+            return Command::FAILURE;
         }
     }
 }

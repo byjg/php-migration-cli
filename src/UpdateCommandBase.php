@@ -2,6 +2,7 @@
 
 namespace ByJG\DbMigration\Console;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -25,7 +26,7 @@ abstract class UpdateCommandBase extends ConsoleCommand
                 if (!$helper->ask($input, $output, $question)) {
                     $output->writeln('Aborted.');
 
-                    return 1;
+                    return Command::FAILURE;
                 }
             }
 
@@ -33,7 +34,7 @@ abstract class UpdateCommandBase extends ConsoleCommand
             $this->callMigrate();
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
-            return 1;
+            return Command::FAILURE;
         }
     }
 }
