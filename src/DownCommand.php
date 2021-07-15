@@ -2,6 +2,7 @@
 
 namespace ByJG\DbMigration\Console;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -32,7 +33,7 @@ class DownCommand extends ConsoleCommand
                 if (!$helper->ask($input, $output, $question)) {
                     $output->writeln('Aborted.');
 
-                    return;
+                    return Command::FAILURE;
                 }
             }
 
@@ -40,6 +41,7 @@ class DownCommand extends ConsoleCommand
             $this->migration->down($this->upTo, true);
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
+            return Command::FAILURE;
         }
     }
 }

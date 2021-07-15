@@ -3,6 +3,7 @@
 namespace ByJG\DbMigration\Console;
 
 use ByJG\DbMigration\Exception\ResetDisabledException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -48,7 +49,7 @@ class ResetCommand extends ConsoleCommand
                 if (!$helper->ask($input, $output, $question)) {
                     $output->writeln('Aborted.');
 
-                    return;
+                    return Command::FAILURE;
                 }
             }
 
@@ -57,6 +58,7 @@ class ResetCommand extends ConsoleCommand
             $this->migration->reset($this->upTo);
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
+            return Command::FAILURE;
         }
     }
 }
