@@ -56,6 +56,7 @@ class ResetCommand extends ConsoleCommand
             parent::execute($input, $output);
             $this->migration->prepareEnvironment();
             $this->migration->reset($this->upTo);
+            return Command::SUCCESS;
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
             return Command::FAILURE;

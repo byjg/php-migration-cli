@@ -32,6 +32,7 @@ abstract class UpdateCommandBase extends ConsoleCommand
 
             parent::execute($input, $output);
             $this->callMigrate();
+            return Command::SUCCESS;
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
             return Command::FAILURE;
