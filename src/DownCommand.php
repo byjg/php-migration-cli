@@ -32,7 +32,7 @@ class DownCommand extends ConsoleCommand
                 if (!$helper->ask($input, $output, $question)) {
                     $output->writeln('Aborted.');
 
-                    return;
+                    return 1;
                 }
             }
 
@@ -40,6 +40,7 @@ class DownCommand extends ConsoleCommand
             $this->migration->down($this->upTo, true);
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
+            return 1;
         }
     }
 }
