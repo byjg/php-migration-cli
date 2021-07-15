@@ -25,7 +25,7 @@ abstract class UpdateCommandBase extends ConsoleCommand
                 if (!$helper->ask($input, $output, $question)) {
                     $output->writeln('Aborted.');
 
-                    return;
+                    return 1;
                 }
             }
 
@@ -33,6 +33,7 @@ abstract class UpdateCommandBase extends ConsoleCommand
             $this->callMigrate();
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
+            return 1;
         }
     }
 }
