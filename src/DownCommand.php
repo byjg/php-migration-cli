@@ -39,6 +39,7 @@ class DownCommand extends ConsoleCommand
 
             parent::execute($input, $output);
             $this->migration->down($this->upTo, true);
+            return Command::SUCCESS;
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
             return Command::FAILURE;

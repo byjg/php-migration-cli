@@ -117,6 +117,7 @@ abstract class ConsoleCommand extends Command
                 $output->writeln('Doing: ' . $command . " to " . $version);
             });
         }
+        return Command::SUCCESS;
     }
 
     /**
