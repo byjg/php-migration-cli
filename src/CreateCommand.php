@@ -14,7 +14,7 @@ class CreateCommand extends Command
     {
         $this
             ->setName('create')
-            ->setDescription('Create the directory structure FROM a pre-existing database')
+            ->setDescription('Create the directory structure necessary to create the migration')
             ->addArgument(
                 'path',
                 InputArgument::REQUIRED,
@@ -28,8 +28,8 @@ class CreateCommand extends Command
             )
             ->addUsage('')
             ->addUsage('Example: ')
-            ->addUsage('   migrate create --path /path/to/structure')
-            ->addUsage('   migrate create --path /path/to/structure --migration ')
+            ->addUsage('   migrate create /path/to/structure')
+            ->addUsage('   migrate create --migration /path/to/structure')
         ;
     }
 
