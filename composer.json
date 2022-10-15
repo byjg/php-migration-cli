@@ -1,17 +1,12 @@
 {
   "name": "byjg/migration-cli",
   "description": "Simple library in PHP for database version control. Supports Sqlite, MySql, Sql Server and Postgres.",
-  "authors": [
-    {
-      "name": "jg",
-      "email": "joao@byjg.com.br"
-    }
-  ],
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
+    "php": ">=7.2",
     "byjg/migration": "4.2.*",
-    "symfony/console": "^4.3"
+    "symfony/console": "^5.3"
   },
   "autoload": {
     "psr-4": {

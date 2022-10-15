@@ -14,7 +14,7 @@ class CreateCommand extends Command
     {
         $this
             ->setName('create')
-            ->setDescription('Create the directory structure FROM a pre-existing database')
+            ->setDescription('Create the directory structure necessary to create the migration')
             ->addArgument(
                 'path',
                 InputArgument::REQUIRED,
@@ -79,6 +79,6 @@ class CreateCommand extends Command
             $output->writeln('Created UP version: ' . $this->createMigrationSql("$path/migrations/up", 0));
             $output->writeln('Created DOWN version: ' . $this->createMigrationSql("$path/migrations/down", -1));
         }
-        return 0;
+        return Command::SUCCESS;
     }
 }

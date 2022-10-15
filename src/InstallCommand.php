@@ -4,6 +4,7 @@ namespace ByJG\DbMigration\Console;
 
 use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
 use ByJG\DbMigration\Exception\OldVersionSchemaException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Exception;
@@ -27,9 +28,7 @@ class InstallCommand extends ConsoleCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            if (parent::execute($input, $output) != 0) {
-                return 1;
-            };
+            parent::execute($input, $output);
 
             $action = 'Database is already versioned. ';
             try {
@@ -46,10 +45,10 @@ class InstallCommand extends ConsoleCommand
             $output->writeln($action);
             $output->writeln('current version: ' . $version['version']);
             $output->writeln('current status.: ' . $version['status']);
-            return 0;
+            return Command::SUCCESS;
         } catch (Exception $ex) {
             $this->handleError($ex, $output);
-            return 1;
+            return Command::FAILURE;
         }
     }
 }
