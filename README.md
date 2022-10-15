@@ -1,10 +1,10 @@
 # Database Migrations (Cli)
 
+[![Build Status](https://github.com/byjg/migration-cli/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/migration-cli/actions/workflows/phpunit.yml)
 [![Opensource ByJG](https://img.shields.io/badge/opensource-byjg-success.svg)](http://opensource.byjg.com)
 [![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/migration-cli/)
 [![GitHub license](https://img.shields.io/github/license/byjg/migration-cli.svg)](https://opensource.byjg.com/opensource/licensing.html)
 [![GitHub release](https://img.shields.io/github/release/byjg/migration-cli.svg)](https://github.com/byjg/migration-cli/releases/)
-[![Build Status](https://travis-ci.com/byjg/migration-cli.svg?branch=master)](https://travis-ci.com/byjg/migration-cli)
 
 This is a simple library written in PHP for database version control. Currently supports Sqlite, MySql, Sql Server and Postgres.
 
