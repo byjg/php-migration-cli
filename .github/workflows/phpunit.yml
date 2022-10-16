@@ -27,7 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: composer install
-      - run: |
+      - name: Run command line migrations
+        run: |
           set -e
           
           export MIGRATE_CONNECTION=sqlite:///tmp/teste.db
