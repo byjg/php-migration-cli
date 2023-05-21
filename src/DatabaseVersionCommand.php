@@ -20,8 +20,8 @@ class DatabaseVersionCommand extends ConsoleCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        parent::execute($input, $output);
         try {
+            parent::execute($input, $output);
             $versionInfo = $this->migration->getCurrentVersion();
             $output->writeln('version: ' . $versionInfo['version']);
             $output->writeln('status.: ' . $versionInfo['status']);
@@ -30,5 +30,6 @@ class DatabaseVersionCommand extends ConsoleCommand
             $this->handleError($ex, $output);
             return Command::FAILURE;
         }
+        return 1;
     }
 }

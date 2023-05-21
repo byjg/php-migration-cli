@@ -96,13 +96,13 @@ abstract class ConsoleCommand extends Command
         $migrationTable = (empty(getenv('MIGRATE_TABLE')) ? "migration_version" : getenv('MIGRATE_TABLE'));
         $this->path = realpath($this->path);
         $uri = new Uri($this->connection);
+
+        Migration::registerDatabase(SqliteDatabase::class);
+        Migration::registerDatabase(MySqlDatabase::class);
+        Migration::registerDatabase(PgsqlDatabase::class);
+        Migration::registerDatabase(DblibDatabase::class);
+
         $this->migration = new Migration($uri, $this->path, $requiredBase, $migrationTable);
-        $this->migration
-            ->registerDatabase('sqlite', SqliteDatabase::class)
-            ->registerDatabase('mysql', MySqlDatabase::class)
-            ->registerDatabase('pgsql', PgsqlDatabase::class)
-            ->registerDatabase('sqlsrv', DblibDatabase::class)
-            ->registerDatabase('dblib', DblibDatabase::class);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
