@@ -8,8 +8,6 @@ on:
   pull_request:
     branches:
       - master
-  schedule:
-    - cron: "0 8 * * 1"
 
 jobs:
   Build:
@@ -30,11 +28,11 @@ jobs:
       - name: Run command line migrations
         run: |
           set -e
-          
+
           export MIGRATE_CONNECTION=sqlite:///tmp/teste.db
           export MIGRATE_PATH=example/sqlite/
-          
-          scripts/migrate reset --yes -vvv  
+
+          scripts/migrate reset --yes -vvv
           scripts/migrate version
           scripts/migrate update -vvv --up-to=1
           scripts/migrate version
