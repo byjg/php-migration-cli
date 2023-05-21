@@ -5,7 +5,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.2",
-    "byjg/migration": "dev-bump",
+    "byjg/migration": "4.9.*",
     "symfony/console": "^5.3"
   },
   "autoload": {
