@@ -142,5 +142,13 @@ export MIGRATE_DISABLE_RESET=true
 - [PHP Rest Template](https://github.com/byjg/php-rest-template)
 - [USDocker](https://github.com/usdocker/usdocker)
 
+## Dependencies
+
+```mermaid
+flowchart TD
+    byjg/migration-cli --> byjg/migration
+    byjg/migration-cli --> symfony/console
+```
+
 ----
 [Open source ByJG](http://opensource.byjg.com)
