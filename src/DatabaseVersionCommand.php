@@ -18,7 +18,7 @@ class DatabaseVersionCommand extends ConsoleCommand
 
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             parent::execute($input, $output);
@@ -30,6 +30,5 @@ class DatabaseVersionCommand extends ConsoleCommand
             $this->handleError($ex, $output);
             return Command::FAILURE;
         }
-        return 1;
     }
 }

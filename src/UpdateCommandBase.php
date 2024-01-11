@@ -12,7 +12,7 @@ abstract class UpdateCommandBase extends ConsoleCommand
 {
     abstract protected function callMigrate();
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $versionInfo = $this->migration->getCurrentVersion();

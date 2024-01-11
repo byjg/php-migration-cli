@@ -32,7 +32,7 @@ class ResetCommand extends ConsoleCommand
      * @return int|null|void
      * @throws ResetDisabledException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (getenv('MIGRATE_DISABLE_RESET') === "true") {
             throw new ResetDisabledException('Reset was disabled by MIGRATE_DISABLE_RESET environment variable. Cannot continue.');

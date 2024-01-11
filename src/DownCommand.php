@@ -19,7 +19,7 @@ class DownCommand extends ConsoleCommand
 
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $versionInfo = $this->migration->getCurrentVersion();
