@@ -74,7 +74,7 @@ abstract class ConsoleCommand extends Command
      * @param OutputInterface $output
      * @throws InvalidMigrationFile
      */
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->connection = $input->getArgument('connection');
         if (!$this->connection) {
@@ -105,7 +105,7 @@ abstract class ConsoleCommand extends Command
         $this->migration = new Migration($uri, $this->path, $requiredBase, $migrationTable);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
             $output->writeln('Connection String: ' . $this->connection);
