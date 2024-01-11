@@ -23,7 +23,7 @@ To get more information about the the project and how to please visit:
 ## Installing
 
 ```
-composer require 'byjg/migration-cli=4.1.*'
+composer require 'byjg/migration-cli'
 ```
 
 ## Running in the command line
