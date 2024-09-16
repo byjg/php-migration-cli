@@ -9,18 +9,18 @@ use ByJG\DbMigration\Database\SqliteDatabase;
 use ByJG\DbMigration\Exception\InvalidMigrationFile;
 use ByJG\DbMigration\Migration;
 use ByJG\Util\Uri;
+use Error;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Exception;
-use Error;
 
 abstract class ConsoleCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName("migrate-cli")
@@ -61,13 +61,13 @@ abstract class ConsoleCommand extends Command
     /**
      * @var Migration
      */
-    protected $migration;
+    protected Migration $migration;
 
-    protected $upTo;
+    protected ?int $upTo;
 
-    protected $connection;
+    protected ?string $connection;
 
-    protected $path;
+    protected ?string $path;
 
     /**
      * @param InputInterface $input
@@ -124,7 +124,7 @@ abstract class ConsoleCommand extends Command
      * @param Exception|Error $exception
      * @param OutputInterface $output
      */
-    protected function handleError($exception, OutputInterface $output)
+    protected function handleError(Exception|Error $exception, OutputInterface $output): void
     {
         $output->writeln('-- Error migrating tables --');
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {

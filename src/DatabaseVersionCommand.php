@@ -2,14 +2,14 @@
 
 namespace ByJG\DbMigration\Console;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Exception;
 
 class DatabaseVersionCommand extends ConsoleCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this
