@@ -4,14 +4,14 @@ namespace ByJG\DbMigration\Console;
 
 use ByJG\DbMigration\Exception\DatabaseNotVersionedException;
 use ByJG\DbMigration\Exception\OldVersionSchemaException;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Exception;
 
 class InstallCommand extends ConsoleCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this
@@ -23,7 +23,7 @@ class InstallCommand extends ConsoleCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -33,10 +33,10 @@ class InstallCommand extends ConsoleCommand
             $action = 'Database is already versioned. ';
             try {
                 $this->migration->getCurrentVersion();
-            } catch (DatabaseNotVersionedException $ex) {
+            } catch (DatabaseNotVersionedException) {
                 $action = 'Created the version table';
                 $this->migration->createVersion();
-            } catch (OldVersionSchemaException $ex) {
+            } catch (OldVersionSchemaException) {
                 $action = 'Updated the version table';
                 $this->migration->updateTableVersion();
             }

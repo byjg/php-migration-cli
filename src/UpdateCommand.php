@@ -10,7 +10,7 @@ use ByJG\DbMigration\Exception\OldVersionSchemaException;
 
 class UpdateCommand extends UpdateCommandBase
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this
@@ -27,8 +27,10 @@ class UpdateCommand extends UpdateCommandBase
      * @throws DatabaseNotVersionedException
      * @throws InvalidMigrationFile
      * @throws OldVersionSchemaException
+     *
+     * @return void
      */
-    protected function callMigrate()
+    protected function callMigrate(): void
     {
         $this->migration->update($this->upTo, true);
     }
