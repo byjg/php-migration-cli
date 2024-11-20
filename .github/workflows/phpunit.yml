@@ -24,23 +24,8 @@ jobs:
       - uses: actions/checkout@v4
       - run: composer install
       - run: ./vendor/bin/psalm
-      - name: Run command line migrations
-        run: |
-          set -e
-
-          export MIGRATE_CONNECTION=sqlite:///tmp/teste.db
-          export MIGRATE_PATH=example/sqlite/
-
-          scripts/migrate reset --yes -vvv
-          scripts/migrate version
-          scripts/migrate update -vvv --up-to=1
-          scripts/migrate version
-          scripts/migrate up -vvv
-          scripts/migrate version
-          scripts/migrate down -vvv --up-to=0
-          scripts/migrate version
-          scripts/migrate update -vvv --up-to=1
-          scripts/migrate version
+      - name: Run tests
+        run: ./tests/script-call-test.sh
 
   Documentation:
     if: github.ref == 'refs/heads/master'
