@@ -2,6 +2,9 @@
 
 set -e
 
+echo "depend on .env file variables"
+scripts/migrate version
+
 export MIGRATE_CONNECTION=sqlite:///tmp/teste.db
 export MIGRATE_PATH=example/sqlite/
 

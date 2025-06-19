@@ -81,7 +81,13 @@ You can omit the uri parameter if you define it in the
 export MIGRATE_CONNECTION=sqlite:///path/to/my.db
 export MIGRATE_PATH=/path/to/migrate_files
 ```
-  
+You can also define those variables in your .env file if it exists in your project root path and the package will discover them  automatically.
+
+```code
+MIGRATE_CONNECTION=sqlite:///path/to/my.db
+MIGRATE_PATH=/path/to/migrate_files
+```
+
 ### Command: create
 
 Create a empty directory structure with base.sql and migrations/up and migrations/down for migrations. This is

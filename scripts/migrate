@@ -10,7 +10,17 @@ if (!file_exists($autoload)) {
 }
 require_once($autoload);
 
+use Composer\InstalledVersions;
 use Symfony\Component\Console\Application;
+
+$dotEnvPath = __DIR__ . '/..';
+
+if (!file_exists($dotEnvPath . '/.env')) {
+    $dotEnvPath = dirname(InstalledVersions::getInstallPath('byjg/migration-cli'), 5);
+}
+
+$dotenv = Dotenv\Dotenv::createUnsafeImmutable($dotEnvPath);
+$dotenv->safeLoad();
 
 $application = new Application('Migrate Script by JG', '4.0.3');
 $application->add(new \ByJG\DbMigration\Console\ResetCommand());
