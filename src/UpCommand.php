@@ -10,6 +10,7 @@ use ByJG\DbMigration\Exception\OldVersionSchemaException;
 
 class UpCommand extends UpdateCommandBase
 {
+    #[\Override]
     protected function configure(): void
     {
         parent::configure();
@@ -28,6 +29,7 @@ class UpCommand extends UpdateCommandBase
      *
      * @return void
      */
+    #[\Override]
     protected function callMigrate(): void
     {
         $this->migration->up($this->upTo, true);

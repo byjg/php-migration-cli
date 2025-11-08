@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DatabaseVersionCommand extends ConsoleCommand
 {
+    #[\Override]
     protected function configure(): void
     {
         parent::configure();
@@ -18,6 +19,7 @@ class DatabaseVersionCommand extends ConsoleCommand
 
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

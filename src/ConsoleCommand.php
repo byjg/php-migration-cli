@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class ConsoleCommand extends Command
 {
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -74,6 +75,7 @@ abstract class ConsoleCommand extends Command
      * @param OutputInterface $output
      * @throws InvalidMigrationFile
      */
+    #[\Override]
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->connection = $input->getArgument('connection');
@@ -105,6 +107,7 @@ abstract class ConsoleCommand extends Command
         $this->migration = new Migration($uri, $this->path, $requiredBase, $migrationTable);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
