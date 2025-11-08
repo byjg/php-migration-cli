@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class InstallCommand extends ConsoleCommand
 {
+    #[\Override]
     protected function configure(): void
     {
         parent::configure();
@@ -25,6 +26,7 @@ class InstallCommand extends ConsoleCommand
      * @param OutputInterface $output
      * @return int
      */
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
