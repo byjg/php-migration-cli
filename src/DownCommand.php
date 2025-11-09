@@ -11,6 +11,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class DownCommand extends ConsoleCommand
 {
+    #[\Override]
     protected function configure(): void
     {
         parent::configure();
@@ -20,6 +21,7 @@ class DownCommand extends ConsoleCommand
 
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

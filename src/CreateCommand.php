@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateCommand extends Command
 {
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -33,6 +34,7 @@ class CreateCommand extends Command
         ;
     }
 
+    #[\Override]
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
     }
@@ -58,6 +60,7 @@ class CreateCommand extends Command
         return $lastVersion;
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $path = $input->getArgument('path');
