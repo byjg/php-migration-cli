@@ -13,6 +13,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class ResetCommand extends ConsoleCommand
 {
+    #[\Override]
     protected function configure(): void
     {
         parent::configure();
@@ -33,6 +34,7 @@ class ResetCommand extends ConsoleCommand
      * @return int
      * @throws ResetDisabledException
      */
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (getenv('MIGRATE_DISABLE_RESET') === "true") {

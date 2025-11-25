@@ -13,6 +13,7 @@ abstract class UpdateCommandBase extends ConsoleCommand
 {
     abstract protected function callMigrate();
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

@@ -53,3 +53,10 @@ package-lock.json
 .usdocker
 
 .env
+
+# PHPUnit
+phpunit.coverage.xml
+phpunit.report.xml
+.phpunit.result.cache
+*.bak
+/.claude/settings.local.json
